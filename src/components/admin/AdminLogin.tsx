@@ -23,7 +23,8 @@ const AdminLogin: React.FC = () => {
       await login(formData.email, formData.password);
       navigate('/admin/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Invalid credentials');
+      const errorMsg = err.response?.data?.error || err.message || 'Invalid credentials';
+      setError(typeof errorMsg === 'string' ? errorMsg : 'Invalid credentials');
     } finally {
       setIsLoading(false);
     }

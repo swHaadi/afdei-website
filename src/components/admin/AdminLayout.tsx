@@ -170,8 +170,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 <div className="mt-8 pt-8 border-t border-primary-800">
                   <div className="mb-4">
                     <p className="text-sm text-primary-200">Logged in as:</p>
-                    <p className="font-semibold">{user?.name}</p>
-                    <p className="text-sm text-primary-200">{user?.email}</p>
+                    <p className="font-semibold">{user?.name || 'Admin'}</p>
+                    <p className="text-sm text-primary-200">{user?.email || ''}</p>
                   </div>
                   <button
                     onClick={handleLogout}
