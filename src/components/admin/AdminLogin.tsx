@@ -38,7 +38,7 @@ const AdminLogin: React.FC = () => {
         className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md"
       >
         <div className="text-center mb-8">
-          <div className="mx-auto mb-4 inline-block bg-primary-900 rounded-xl p-3">
+          <div className="mx-auto mb-4 inline-block bg-white border-2 border-gray-200 rounded-xl p-3 shadow-sm">
             <img src="/logo.png" alt="AFDEI Logo" className="h-16 w-auto mx-auto" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Admin Login</h1>

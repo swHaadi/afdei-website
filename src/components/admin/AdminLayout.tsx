@@ -61,7 +61,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       {/* Mobile Header */}
       <div className="lg:hidden bg-primary-900 text-white p-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <img src="/logo.png" alt="AFDEI Logo" className="h-10 w-auto bg-white rounded-lg p-1" />
+          <div className="bg-white rounded-lg p-1.5 shadow-sm">
+            <img src="/logo.png" alt="AFDEI Logo" className="h-8 w-auto" />
+          </div>
           <span className="text-lg font-bold">CMS</span>
         </div>
         <button
@@ -87,7 +89,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             >
               <div className="p-6">
                 <div className="flex items-center gap-3 mb-8">
-                  <img src="/logo.png" alt="AFDEI Logo" className="h-12 w-auto bg-white rounded-lg p-1" />
+                  <div className="bg-white rounded-lg p-2 shadow-sm">
+                    <img src="/logo.png" alt="AFDEI Logo" className="h-10 w-auto" />
+                  </div>
                   <h1 className="text-xl font-bold">CMS</h1>
                 </div>
                 
