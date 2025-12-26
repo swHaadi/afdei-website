@@ -1,21 +1,10 @@
-import express from 'express';
-import cors from 'cors';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const app = express();
-
-// In-memory database for demo (persists during function lifecycle)
-let database = {
+// In-memory database
+const database = {
   users: [
-    {
-      id: '1',
-      name: 'Admin',
-      email: 'admin@afdei.org',
-      password: '$2a$10$rQnM1DkBvRxdH8CjQz1xPeqN8xqJLz5xP.1uVyP1Q2fLZ5K3X5K3C', // admin123
-      role: 'admin',
-      isActive: true
-    }
+    { id: '1', name: 'Admin', email: 'admin@afdei.org', password: 'admin123', role: 'admin', isActive: true }
   ],
   content: {
     hero: {
@@ -35,259 +24,197 @@ let database = {
       section: 'about',
       contentEn: JSON.stringify({
         title: 'About Us',
-        vision: { title: 'Vision', content: 'To be the leading force in promoting sustainable economic development and integration across the Arab world, fostering prosperity and unity among Arab nations through innovative initiatives and collaborative partnerships.' },
-        mission: { title: 'Mission', content: 'To strengthen economic ties between Arab nations, promote sustainable development, facilitate the implementation of joint economic projects, and support the private sector in overcoming challenges to achieve comprehensive Arab economic integration.' },
+        vision: { title: 'Vision', content: 'To be the leading force in promoting sustainable economic development and integration across the Arab world.' },
+        mission: { title: 'Mission', content: 'To strengthen economic ties between Arab nations and promote sustainable development.' },
         values: { title: 'Our Values', leadership: 'Leadership', empowerment: 'Empowerment', innovation: 'Innovation', sustainability: 'Sustainability' },
-        president: { title: "President's Message", message: 'Welcome to the Arab Federation for Development and Economic Integration. Our commitment to fostering economic growth and development across the Arab world remains unwavering.' },
-        objectives: { title: 'Our Objectives', list: [
-          'Strengthen relationships between Arab economic bodies and the private sector.',
-          'Assist the Arab private sector in finding solutions to challenges.',
-          'Propose projects contributing to Arab economic integration.',
-          'Contribute to the integration and development of the Arab private sector.',
-          'Develop trade exchange between Arab countries.'
-        ]}
+        president: { title: "President's Message", message: 'Welcome to the Arab Federation for Development and Economic Integration.' },
+        objectives: { title: 'Our Objectives', list: ['Strengthen relationships between Arab economic bodies.', 'Assist the Arab private sector.', 'Propose projects for Arab economic integration.', 'Develop trade exchange between Arab countries.'] }
       }),
       contentAr: JSON.stringify({
         title: 'من نحن',
-        vision: { title: 'الرؤية', content: 'أن نكون القوة الرائدة في تعزيز التنمية الاقتصادية المستدامة والتكامل عبر العالم العربي.' },
-        mission: { title: 'الرسالة', content: 'تعزيز الروابط الاقتصادية بين الدول العربية، وتعزيز التنمية المستدامة.' },
+        vision: { title: 'الرؤية', content: 'أن نكون القوة الرائدة في تعزيز التنمية الاقتصادية المستدامة.' },
+        mission: { title: 'الرسالة', content: 'تعزيز الروابط الاقتصادية بين الدول العربية.' },
         values: { title: 'قيمنا', leadership: 'القيادة', empowerment: 'التمكين', innovation: 'الابتكار', sustainability: 'الاستدامة' },
         president: { title: 'رسالة الرئيس', message: 'مرحباً بكم في الاتحاد العربي للتنمية والتكامل الاقتصادي.' },
-        objectives: { title: 'أهدافنا', list: [
-          'تعزيز العلاقات بين الهيئات الاقتصادية العربية والقطاع الخاص.',
-          'مساعدة القطاع الخاص العربي في إيجاد حلول للتحديات.',
-          'اقتراح المشاريع المساهمة في التكامل الاقتصادي العربي.',
-          'المساهمة في تكامل وتطوير القطاع الخاص العربي.',
-          'تطوير التبادل التجاري بين الدول العربية.'
-        ]}
+        objectives: { title: 'أهدافنا', list: ['تعزيز العلاقات بين الهيئات الاقتصادية العربية.', 'مساعدة القطاع الخاص العربي.', 'اقتراح المشاريع للتكامل الاقتصادي العربي.', 'تطوير التبادل التجاري بين الدول العربية.'] }
       })
     },
     membership: {
       section: 'membership',
       contentEn: JSON.stringify({
-        title: 'Membership',
-        subtitle: 'Join Our Growing Network',
+        title: 'Membership', subtitle: 'Join Our Growing Network',
         description: 'Become a member of the Arab Federation for Development and Economic Integration.',
-        benefits: [
-          'Access to exclusive networking opportunities',
-          'Recognition as a leader in Arab economic development',
-          'Participation in regional and international conferences',
-          'Business development and partnership opportunities'
-        ],
-        buttonText: 'Join Us',
-        memberCount: '500+',
-        memberLabel: 'Active Members'
+        benefits: ['Access to exclusive networking opportunities', 'Recognition as a leader', 'Participation in conferences', 'Business development opportunities'],
+        buttonText: 'Join Us', memberCount: '500+', memberLabel: 'Active Members'
       }),
       contentAr: JSON.stringify({
-        title: 'العضوية',
-        subtitle: 'انضم إلى شبكتنا المتنامية',
+        title: 'العضوية', subtitle: 'انضم إلى شبكتنا المتنامية',
         description: 'كن عضواً في الاتحاد العربي للتنمية والتكامل الاقتصادي.',
-        benefits: [
-          'الوصول إلى فرص التواصل الحصرية',
-          'الاعتراف كقائد في التنمية الاقتصادية العربية',
-          'المشاركة في المؤتمرات والفعاليات',
-          'فرص تطوير الأعمال والشراكة'
-        ],
-        buttonText: 'انضم إلينا',
-        memberCount: '+500',
-        memberLabel: 'عضو نشط'
+        benefits: ['الوصول إلى فرص التواصل', 'الاعتراف كقائد', 'المشاركة في المؤتمرات', 'فرص تطوير الأعمال'],
+        buttonText: 'انضم إلينا', memberCount: '+500', memberLabel: 'عضو نشط'
       })
     },
     advisory: {
       section: 'advisory',
       contentEn: JSON.stringify({
-        title: 'Advisory Bodies',
-        subtitle: 'Our advisory bodies bring together experts and leaders.',
+        title: 'Advisory Bodies', subtitle: 'Our advisory bodies bring together experts.',
         bodies: [
-          { title: 'Economic Development Committee', description: 'Strategic economic planning and development.', members: 12 },
-          { title: 'Social Integration Council', description: 'Social policies and programs.', members: 10 },
-          { title: 'Business Advisory Board', description: 'Private sector engagement and investment.', members: 15 },
-          { title: 'International Relations Committee', description: 'International partnerships.', members: 8 }
+          { title: 'Economic Development Committee', description: 'Strategic economic planning.', members: 12 },
+          { title: 'Business Advisory Board', description: 'Private sector engagement.', members: 15 }
         ]
       }),
       contentAr: JSON.stringify({
-        title: 'الهيئات الاستشارية',
-        subtitle: 'تجمع هيئاتنا الاستشارية الخبراء والقادة.',
+        title: 'الهيئات الاستشارية', subtitle: 'تجمع هيئاتنا الاستشارية الخبراء.',
         bodies: [
-          { title: 'لجنة التنمية الاقتصادية', description: 'التخطيط الاقتصادي الاستراتيجي.', members: 12 },
-          { title: 'مجلس التكامل الاجتماعي', description: 'السياسات والبرامج الاجتماعية.', members: 10 },
-          { title: 'المجلس الاستشاري للأعمال', description: 'مشاركة القطاع الخاص والاستثمار.', members: 15 },
-          { title: 'لجنة العلاقات الدولية', description: 'الشراكات الدولية.', members: 8 }
+          { title: 'لجنة التنمية الاقتصادية', description: 'التخطيط الاقتصادي.', members: 12 },
+          { title: 'المجلس الاستشاري للأعمال', description: 'مشاركة القطاع الخاص.', members: 15 }
         ]
       })
     },
     contact: {
       section: 'contact',
       contentEn: JSON.stringify({
-        title: 'Contact Us',
-        getInTouch: 'Get in Touch',
-        sendMessage: 'Send us a Message',
-        address: '4 Dar Al-Salam Street – Cairo – Egypt',
-        email: 'info@afdei.org',
-        phone: '+20 2 2639 6296',
-        workingHours: 'Sunday - Thursday: 9:00 AM - 5:00 PM'
+        title: 'Contact Us', getInTouch: 'Get in Touch', sendMessage: 'Send us a Message',
+        address: '4 Dar Al-Salam Street – Cairo – Egypt', email: 'info@afdei.org',
+        phone: '+20 2 2639 6296', workingHours: 'Sunday - Thursday: 9:00 AM - 5:00 PM'
       }),
       contentAr: JSON.stringify({
-        title: 'اتصل بنا',
-        getInTouch: 'تواصل معنا',
-        sendMessage: 'أرسل لنا رسالة',
-        address: '4 شارع دار السلام - القاهرة - مصر',
-        email: 'info@afdei.org',
-        phone: '+20 2 2639 6296',
-        workingHours: 'الأحد - الخميس: 9:00 صباحاً - 5:00 مساءً'
+        title: 'اتصل بنا', getInTouch: 'تواصل معنا', sendMessage: 'أرسل لنا رسالة',
+        address: '4 شارع دار السلام - القاهرة - مصر', email: 'info@afdei.org',
+        phone: '+20 2 2639 6296', workingHours: 'الأحد - الخميس: 9:00 صباحاً - 5:00 مساءً'
       })
     }
   },
   events: [
-    {
-      id: '1',
-      titleEn: 'Arab Economic Summit 2025',
-      titleAr: 'القمة الاقتصادية العربية 2025',
-      descriptionEn: 'Annual summit bringing together economic leaders from across the Arab world.',
-      descriptionAr: 'القمة السنوية التي تجمع القادة الاقتصاديين من جميع أنحاء العالم العربي.',
-      date: '2025-03-15',
-      locationEn: 'Cairo, Egypt',
-      locationAr: 'القاهرة، مصر',
+    { id: '1', titleEn: 'Arab Economic Summit 2025', titleAr: 'القمة الاقتصادية العربية 2025',
+      descriptionEn: 'Annual summit bringing together economic leaders.', descriptionAr: 'القمة السنوية التي تجمع القادة الاقتصاديين.',
+      date: '2025-03-15', locationEn: 'Cairo, Egypt', locationAr: 'القاهرة، مصر',
       imageUrl: 'https://images.pexels.com/photos/2833037/pexels-photo-2833037.jpeg?auto=compress&cs=tinysrgb&w=600',
-      isFeatured: true,
-      isActive: true
-    }
+      isFeatured: true, isActive: true }
   ],
   projects: [
-    {
-      id: '1',
-      nameEn: 'E-Tajer Project',
-      nameAr: 'مشروع إي تاجر',
-      descriptionEn: 'A comprehensive Arab e-commerce platform designed to facilitate trade.',
-      descriptionAr: 'منصة تجارة إلكترونية عربية شاملة مصممة لتسهيل التجارة.',
-      isFeatured: true,
-      isActive: true
-    }
-  ],
-  contactSubmissions: []
+    { id: '1', nameEn: 'E-Tajer Project', nameAr: 'مشروع إي تاجر',
+      descriptionEn: 'A comprehensive Arab e-commerce platform.', descriptionAr: 'منصة تجارة إلكترونية عربية شاملة.',
+      isFeatured: true, isActive: true }
+  ]
 };
 
 const JWT_SECRET = process.env.JWT_SECRET || 'afdei-secret-2025';
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Auth middleware
-const authMiddleware = (req, res, next) => {
-  const token = req.headers.authorization?.replace('Bearer ', '');
-  if (!token) return res.status(401).json({ error: 'No token provided' });
-  
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    res.status(401).json({ error: 'Invalid token' });
-  }
+// CORS headers
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Content-Type': 'application/json'
 };
 
-// Auth routes
-app.post('/api/auth/login', async (req, res) => {
-  const { email, password } = req.body;
-  const user = database.users.find(u => u.email === email);
-  
-  if (!user) return res.status(401).json({ error: 'Invalid credentials' });
-  
-  // Check password (for demo, accept 'admin123')
-  const isValid = password === 'admin123' || await bcrypt.compare(password, user.password);
-  if (!isValid) return res.status(401).json({ error: 'Invalid credentials' });
-  
-  const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
-  res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
-});
+// Verify JWT
+function verifyToken(authHeader) {
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
+  try {
+    return jwt.verify(authHeader.replace('Bearer ', ''), JWT_SECRET);
+  } catch (e) {
+    return null;
+  }
+}
 
-app.get('/api/auth/me', authMiddleware, (req, res) => {
-  const user = database.users.find(u => u.id === req.user.id);
-  if (!user) return res.status(404).json({ error: 'User not found' });
-  res.json({ id: user.id, name: user.name, email: user.email, role: user.role });
-});
+export default async function handler(req, res) {
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    return res.status(200).end();
+  }
 
-// Content routes
-app.get('/api/content', (req, res) => {
-  res.json(Object.values(database.content));
-});
+  // Set CORS headers
+  Object.entries(corsHeaders).forEach(([key, value]) => res.setHeader(key, value));
 
-app.get('/api/content/:section', (req, res) => {
-  const content = database.content[req.params.section];
-  if (!content) return res.status(404).json({ error: 'Content not found' });
-  res.json(content);
-});
+  const { url, method } = req;
+  const path = url.replace('/api', '');
 
-app.put('/api/content/:section', authMiddleware, (req, res) => {
-  const { section } = req.params;
-  const { contentEn, contentAr } = req.body;
-  
-  database.content[section] = {
-    section,
-    contentEn: typeof contentEn === 'string' ? contentEn : JSON.stringify(contentEn),
-    contentAr: typeof contentAr === 'string' ? contentAr : JSON.stringify(contentAr)
-  };
-  
-  res.json(database.content[section]);
-});
+  try {
+    // AUTH ROUTES
+    if (path === '/auth/login' && method === 'POST') {
+      const { email, password } = req.body;
+      const user = database.users.find(u => u.email === email);
+      if (!user || user.password !== password) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+      const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+      return res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+    }
 
-// Events routes
-app.get('/api/events', (req, res) => {
-  res.json(database.events);
-});
+    if (path === '/auth/me' && method === 'GET') {
+      const decoded = verifyToken(req.headers.authorization);
+      if (!decoded) return res.status(401).json({ error: 'Unauthorized' });
+      const user = database.users.find(u => u.id === decoded.id);
+      if (!user) return res.status(404).json({ error: 'User not found' });
+      return res.json({ id: user.id, name: user.name, email: user.email, role: user.role });
+    }
 
-app.post('/api/events', authMiddleware, (req, res) => {
-  const event = { id: Date.now().toString(), ...req.body };
-  database.events.push(event);
-  res.status(201).json(event);
-});
+    // CONTENT ROUTES
+    if (path === '/content' && method === 'GET') {
+      return res.json(Object.values(database.content));
+    }
 
-app.put('/api/events/:id', authMiddleware, (req, res) => {
-  const index = database.events.findIndex(e => e.id === req.params.id);
-  if (index === -1) return res.status(404).json({ error: 'Event not found' });
-  database.events[index] = { ...database.events[index], ...req.body };
-  res.json(database.events[index]);
-});
+    if (path.startsWith('/content/') && method === 'GET') {
+      const section = path.replace('/content/', '');
+      const content = database.content[section];
+      if (!content) return res.status(404).json({ error: 'Content not found' });
+      return res.json(content);
+    }
 
-app.delete('/api/events/:id', authMiddleware, (req, res) => {
-  database.events = database.events.filter(e => e.id !== req.params.id);
-  res.json({ message: 'Deleted' });
-});
+    if (path.startsWith('/content/') && method === 'PUT') {
+      const decoded = verifyToken(req.headers.authorization);
+      if (!decoded) return res.status(401).json({ error: 'Unauthorized' });
+      const section = path.replace('/content/', '');
+      const { contentEn, contentAr } = req.body;
+      database.content[section] = {
+        section,
+        contentEn: typeof contentEn === 'string' ? contentEn : JSON.stringify(contentEn),
+        contentAr: typeof contentAr === 'string' ? contentAr : JSON.stringify(contentAr)
+      };
+      return res.json(database.content[section]);
+    }
 
-// Projects routes
-app.get('/api/projects', (req, res) => {
-  res.json(database.projects);
-});
+    // EVENTS ROUTES
+    if (path === '/events' && method === 'GET') {
+      return res.json(database.events);
+    }
 
-app.post('/api/projects', authMiddleware, (req, res) => {
-  const project = { id: Date.now().toString(), ...req.body };
-  database.projects.push(project);
-  res.status(201).json(project);
-});
+    if (path === '/events' && method === 'POST') {
+      const decoded = verifyToken(req.headers.authorization);
+      if (!decoded) return res.status(401).json({ error: 'Unauthorized' });
+      const event = { id: Date.now().toString(), ...req.body };
+      database.events.push(event);
+      return res.status(201).json(event);
+    }
 
-app.put('/api/projects/:id', authMiddleware, (req, res) => {
-  const index = database.projects.findIndex(p => p.id === req.params.id);
-  if (index === -1) return res.status(404).json({ error: 'Project not found' });
-  database.projects[index] = { ...database.projects[index], ...req.body };
-  res.json(database.projects[index]);
-});
+    // PROJECTS ROUTES
+    if (path === '/projects' && method === 'GET') {
+      return res.json(database.projects);
+    }
 
-app.delete('/api/projects/:id', authMiddleware, (req, res) => {
-  database.projects = database.projects.filter(p => p.id !== req.params.id);
-  res.json({ message: 'Deleted' });
-});
+    if (path === '/projects' && method === 'POST') {
+      const decoded = verifyToken(req.headers.authorization);
+      if (!decoded) return res.status(401).json({ error: 'Unauthorized' });
+      const project = { id: Date.now().toString(), ...req.body };
+      database.projects.push(project);
+      return res.status(201).json(project);
+    }
 
-// Contact routes
-app.post('/api/contact', (req, res) => {
-  const submission = { id: Date.now().toString(), ...req.body, createdAt: new Date().toISOString() };
-  database.contactSubmissions.push(submission);
-  res.status(201).json({ message: 'Message sent successfully' });
-});
+    // CONTACT ROUTES
+    if (path === '/contact' && method === 'POST') {
+      return res.status(201).json({ message: 'Message sent successfully' });
+    }
 
-app.get('/api/contact', authMiddleware, (req, res) => {
-  res.json(database.contactSubmissions);
-});
+    // Not found
+    return res.status(404).json({ error: 'Not found' });
 
-export default app;
-
+  } catch (error) {
+    console.error('API Error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
