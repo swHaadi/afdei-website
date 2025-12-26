@@ -22,8 +22,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchUser = async () => {
     try {
       const response = await api.get('/api/auth/me');
-      setUser(response.data);
-    } catch { logout(); } finally { setIsLoading(false); }
+      if (response.data) {
+        setUser(response.data);
+      } else {
+        console.error('No user data received');
+        logout();
+      }
+    } catch (err) { 
+      console.error('Auth error:', err);
+      logout(); 
+    } finally { 
+      setIsLoading(false); 
+    }
   };
 
   const login = async (email: string, password: string) => {
