@@ -1,8 +1,6 @@
 {
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api" },
-    { "src": "/assets/(.*)", "dest": "/assets/$1" },
-    { "src": "/logo.png", "dest": "/logo.png" },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/index" },
+    { "source": "/((?!assets|logo|api).*)", "destination": "/index.html" }
   ]
 }

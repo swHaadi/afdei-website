@@ -22,7 +22,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchUser = async () => {
     try {
       const response = await api.get('/api/auth/me');
-      setUser(response.data.user);
+      setUser(response.data);
     } catch { logout(); } finally { setIsLoading(false); }
   };
 
