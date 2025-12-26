@@ -11,10 +11,20 @@ const Activities: React.FC = () => {
   const [events, setEvents] = useState<any[]>([]);
 
   useEffect(() => {
-    api.get('/api/events').then(res => setEvents(res.data.slice(0, 6))).catch(() => {
+    api.get('/api/events').then(res => {
+      // Transform API data to component's expected format
+      const eventsData = (res.data || []).map((e: any) => ({
+        _id: e.id || e._id,
+        title: { en: e.titleEn || e.title?.en || '', ar: e.titleAr || e.title?.ar || '' },
+        date: e.date,
+        location: { en: e.locationEn || e.location?.en || '', ar: e.locationAr || e.location?.ar || '' },
+        description: { en: e.descriptionEn || e.description?.en || '', ar: e.descriptionAr || e.description?.ar || '' },
+        image: { url: e.imageUrl || e.image?.url || 'https://images.pexels.com/photos/2833037/pexels-photo-2833037.jpeg?auto=compress&cs=tinysrgb&w=600' }
+      }));
+      setEvents(eventsData.slice(0, 6));
+    }).catch(() => {
       setEvents([
-        { _id: '1', title: { en: 'Arab Economic Summit 2025', ar: 'القمة الاقتصادية العربية 2025' }, date: new Date('2025-03-15'), location: { en: 'Cairo, Egypt', ar: 'القاهرة، مصر' }, description: { en: 'Annual summit bringing together economic leaders.', ar: 'القمة السنوية التي تجمع القادة الاقتصاديين.' }, image: { url: 'https://images.pexels.com/photos/2833037/pexels-photo-2833037.jpeg?auto=compress&cs=tinysrgb&w=600' } },
-        { _id: '2', title: { en: 'Youth Entrepreneurship Workshop', ar: 'ورشة عمل ريادة الأعمال للشباب' }, date: new Date('2025-02-20'), location: { en: 'Dubai, UAE', ar: 'دبي، الإمارات' }, description: { en: 'Empowering young entrepreneurs.', ar: 'تمكين رواد الأعمال الشباب.' }, image: { url: 'https://images.pexels.com/photos/7413915/pexels-photo-7413915.jpeg?auto=compress&cs=tinysrgb&w=600' } }
+        { _id: '1', title: { en: 'Arab Economic Summit 2025', ar: 'القمة الاقتصادية العربية 2025' }, date: new Date('2025-03-15'), location: { en: 'Cairo, Egypt', ar: 'القاهرة، مصر' }, description: { en: 'Annual summit bringing together economic leaders.', ar: 'القمة السنوية التي تجمع القادة الاقتصاديين.' }, image: { url: 'https://images.pexels.com/photos/2833037/pexels-photo-2833037.jpeg?auto=compress&cs=tinysrgb&w=600' } }
       ]);
     });
   }, []);

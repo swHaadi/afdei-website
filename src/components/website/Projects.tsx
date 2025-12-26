@@ -11,7 +11,18 @@ const Projects: React.FC = () => {
   const [projects, setProjects] = useState<any[]>([]);
 
   useEffect(() => {
-    api.get('/api/projects').then(res => setProjects(res.data)).catch(() => {
+    api.get('/api/projects').then(res => {
+      // Transform API data to component's expected format
+      const projectsData = (res.data || []).map((p: any) => ({
+        _id: p.id || p._id,
+        name: { en: p.nameEn || p.name?.en || '', ar: p.nameAr || p.name?.ar || '' },
+        description: { en: p.descriptionEn || p.description?.en || '', ar: p.descriptionAr || p.description?.ar || '' },
+        objectives: { en: p.objectivesEn || p.objectives?.en || [], ar: p.objectivesAr || p.objectives?.ar || [] },
+        images: p.images || [{ url: 'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=800' }],
+        isFeatured: p.isFeatured
+      }));
+      setProjects(projectsData);
+    }).catch(() => {
       setProjects([{ _id: '1', name: { en: 'E-Tajer Project', ar: 'مشروع إي تاجر' }, description: { en: 'A comprehensive e-commerce platform connecting Arab businesses.', ar: 'منصة تجارة إلكترونية شاملة تربط الأعمال العربية.' }, objectives: { en: ['Enable digital transformation', 'Create a unified marketplace', 'Support SMEs'], ar: ['تمكين التحول الرقمي', 'إنشاء سوق موحد', 'دعم الشركات الصغيرة'] }, images: [{ url: 'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=800' }], isFeatured: true }]);
     });
   }, []);
