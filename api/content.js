@@ -1,0 +1,17 @@
+const content = {
+  hero: { section: 'hero', contentEn: '{"title":"Arab Federation for Development and Economic Integration","subtitle":"Enhancing development and economic integration in Arab countries","description":"The Arab Federation operates under the Council of Arab Economic Unity."}', contentAr: '{"title":"الاتحاد العربي للتنمية والتكامل الاقتصادي","subtitle":"تعزيز التنمية والتكامل الاقتصادي في الدول العربية","description":"يعمل الاتحاد العربي تحت مظلة مجلس الوحدة الاقتصادية العربية."}' },
+  about: { section: 'about', contentEn: '{"title":"About Us","vision":{"title":"Vision","content":"To be the leading force in promoting sustainable economic development."},"mission":{"title":"Mission","content":"To strengthen economic ties between Arab nations."},"values":{"title":"Our Values","leadership":"Leadership","empowerment":"Empowerment","innovation":"Innovation","sustainability":"Sustainability"},"president":{"title":"President Message","message":"Welcome to AFDEI."},"objectives":{"title":"Our Objectives","list":["Strengthen relationships","Assist private sector","Propose projects","Develop trade"]}}', contentAr: '{"title":"من نحن","vision":{"title":"الرؤية","content":"أن نكون القوة الرائدة."},"mission":{"title":"الرسالة","content":"تعزيز الروابط الاقتصادية."},"values":{"title":"قيمنا","leadership":"القيادة","empowerment":"التمكين","innovation":"الابتكار","sustainability":"الاستدامة"},"president":{"title":"رسالة الرئيس","message":"مرحباً بكم."},"objectives":{"title":"أهدافنا","list":["تعزيز العلاقات","مساعدة القطاع الخاص","اقتراح المشاريع","تطوير التبادل التجاري"]}}' },
+  membership: { section: 'membership', contentEn: '{"title":"Membership","subtitle":"Join Our Network","description":"Become a member.","benefits":["Networking","Recognition","Conferences","Partnerships"],"buttonText":"Join Us","memberCount":"500+","memberLabel":"Active Members"}', contentAr: '{"title":"العضوية","subtitle":"انضم إلى شبكتنا","description":"كن عضواً.","benefits":["التواصل","الاعتراف","المؤتمرات","الشراكات"],"buttonText":"انضم إلينا","memberCount":"+500","memberLabel":"عضو نشط"}' },
+  advisory: { section: 'advisory', contentEn: '{"title":"Advisory Bodies","subtitle":"Our advisory bodies.","bodies":[{"title":"Economic Committee","description":"Strategic planning.","members":12},{"title":"Business Board","description":"Private sector.","members":15}]}', contentAr: '{"title":"الهيئات الاستشارية","subtitle":"هيئاتنا الاستشارية.","bodies":[{"title":"لجنة التنمية","description":"التخطيط الاستراتيجي.","members":12},{"title":"مجلس الأعمال","description":"القطاع الخاص.","members":15}]}' },
+  contact: { section: 'contact', contentEn: '{"title":"Contact Us","getInTouch":"Get in Touch","sendMessage":"Send Message","address":"Cairo, Egypt","email":"info@afdei.org","phone":"+20 2 2639 6296","workingHours":"Sun-Thu: 9AM-5PM"}', contentAr: '{"title":"اتصل بنا","getInTouch":"تواصل معنا","sendMessage":"أرسل رسالة","address":"القاهرة، مصر","email":"info@afdei.org","phone":"+20 2 2639 6296","workingHours":"الأحد-الخميس: 9ص-5م"}' }
+};
+
+export default function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  return res.status(200).json(Object.values(content));
+}
+
