@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "membership": "Membership",
+    "advisory": "Advisory Bodies",
+    "activities": "Activities & Events",
+    "projects": "Projects",
+    "contact": "Contact Us"
+  },
+  "hero": {
+    "title": "Arab Federation for Development and Economic Integration",
+    "subtitle": "Enhancing development and economic integration in Arab countries",
+    "description": "The Arab Federation for Development and Economic Integration operates under the Council of Arab Economic Unity, part of the League of Arab States, headquartered in Cairo, Egypt."
+  },
+  "about": {
+    "title": "About Us",
+    "vision": {
+      "title": "Vision",
+      "content": "To enhance development and economic integration in Arab countries, aiming to raise the quality of life index among their populations."
+    },
+    "mission": {
+      "title": "Mission",
+      "content": "To adopt policies, develop plans and programs, launch initiatives, and provide necessary support to ensure sustainable development and economic integration among Arab countries."
+    },
+    "values": {
+      "title": "Core Values",
+      "leadership": "Leadership",
+      "empowerment": "Empowerment",
+      "innovation": "Innovation",
+      "sustainability": "Sustainability"
+    },
+    "president": {
+      "title": "President's Message"
+    },
+    "objectives": {
+      "title": "Objectives"
+    },
+    "statute": {
+      "title": "Statute"
+    },
+    "structure": {
+      "title": "Organizational Structure"
+    }
+  },
+  "membership": {
+    "title": "Membership",
+    "joinUs": "Join Us"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "submit": "Send Message"
+    },
+    "info": {
+      "address": "Address",
+      "email": "Email",
+      "phone": "Phone",
+      "workingHours": "Working Hours"
+    }
+  },
+  "footer": {
+    "copyright": "© Arab Federation for Development and Economic Integration | All Rights Reserved"
+  }
+}

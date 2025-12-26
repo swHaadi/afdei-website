@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// User model for authentication
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("editor") // admin, editor
+  isActive  Boolean  @default(true)
+  lastLogin DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Content model for website sections
+model Content {
+  id        String   @id @default(cuid())
+  section   String   @unique // hero, about, membership, advisory, etc.
+  contentEn String   // JSON string for English content
+  contentAr String   // JSON string for Arabic content
+  images    String?  // JSON string for images array
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Event model for activities and events
+model Event {
+  id          String   @id @default(cuid())
+  titleEn     String
+  titleAr     String
+  descriptionEn String
+  descriptionAr String
+  date        DateTime
+  locationEn  String
+  locationAr  String
+  imageUrl    String?
+  isFeatured  Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Project model for federation projects
+model Project {
+  id            String   @id @default(cuid())
+  nameEn        String
+  nameAr        String
+  descriptionEn String
+  descriptionAr String
+  objectivesEn  String   // JSON array
+  objectivesAr  String   // JSON array
+  benefitsEn    String?  // JSON array
+  benefitsAr    String?  // JSON array
+  images        String?  // JSON array
+  isFeatured    Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// Contact form submissions
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// Media library
+model Media {
+  id        String   @id @default(cuid())
+  filename  String
+  originalName String
+  mimeType  String
+  size      Int
+  url       String
+  alt       String?
+  createdAt DateTime @default(now())
+}
+
+// Site settings
+model Settings {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String   // JSON string for complex values
+  updatedAt   DateTime @updatedAt
+}
